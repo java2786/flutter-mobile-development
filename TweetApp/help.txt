@@ -1,0 +1,34 @@
+Select your choice
+	1 : Register
+	2 : Login
+	3 : Forgot Password
+
+1
+
+Enter your email: abc@gmail.com
+Enter your password: abc@123
+		save this data into list, map/dictionary
+
+your account created successfully
+Select your choice
+	1 : Register
+	2 : Login
+	3 : Forgot Password
+
+2
+Enter your email: abc@gmail.com
+Enter your password: abc@123
+	find and match these details with stored data
+
+Valid User
+	1 : Post Message
+	2 : View My Messages
+	3 : Reset Password
+	4 : Logout
+
+
+Invalid User
+Select your choice
+	1 : Register
+	2 : Login
+	3 : Forgot Password
