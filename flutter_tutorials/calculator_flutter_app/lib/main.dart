@@ -29,6 +29,41 @@ class CalculatorHome extends StatefulWidget {
 
 class _CalculatorHomeState extends State<CalculatorHome> {
   String displayText = "0";
+  String operator = "";
+  String first_number = "";
+  String second_number = "";
+
+  void onButtonPressed(String label){
+    print("$label button clicked");
+    if(label=="C"){
+      displayText = "0";
+      operator = "";
+      first_number = "";
+      second_number = "";
+    } else if(label=="+" ||label=="-" ||label=="/" ||label=="*"){
+      first_number = displayText;
+      displayText ="0";
+      operator = label;
+    } else if (label=="="){
+      double fn = double.parse(first_number);
+      double sn = double.parse(displayText);
+      double result = 0;
+      if(operator == "+"){
+        result = fn + sn;
+      } else if(operator == "-"){
+        result = fn - sn;
+      } else if(operator == "/"){
+        result = fn / sn;
+      } else if(operator == "*"){
+        result = fn * sn;
+      } 
+      displayText = result.toString();
+      operator = label;
+    } else {
+      displayText = displayText + label;
+    }
+
+  }
 
   MaterialColor buildButtonColor(String label) {
     switch (label) {
@@ -51,7 +86,7 @@ class _CalculatorHomeState extends State<CalculatorHome> {
         padding: EdgeInsets.all(5),
         child: ElevatedButton(
           onPressed: () {
-            print("$label button clicked");
+            onButtonPressed(label);
           },
           style: ElevatedButton.styleFrom(
             // backgroundColor: label=="="? Colors.orange:Colors.grey,
