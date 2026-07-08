@@ -34,7 +34,11 @@ class _CalculatorHomeState extends State<CalculatorHome> {
   String second_number = "";
 
   void onButtonPressed(String label){
-    print("$label button clicked");
+    setState((){
+      print("$label button clicked");
+      
+     
+
     if(label=="C"){
       displayText = "0";
       operator = "";
@@ -60,8 +64,13 @@ class _CalculatorHomeState extends State<CalculatorHome> {
       displayText = result.toString();
       operator = label;
     } else {
-      displayText = displayText + label;
+       if(displayText=="0"){
+        displayText = label;
+      } else {
+        displayText = displayText+label;
+      }
     }
+    });
 
   }
 
@@ -151,6 +160,15 @@ class _CalculatorHomeState extends State<CalculatorHome> {
       appBar: AppBar(title: Text("Brain Mentors Calculator")),
       body: Column(
         children: [
+          // Container(
+          //   alignment: Alignment.topLeft,
+          //   padding: EdgeInsets.all(25),
+          //   child: Text(
+          //     "$first_number $operator $second_number",
+          //     style: TextStyle(fontSize: 24),
+          //   ),
+          // ),
+          Divider(),
           Container(
             alignment: Alignment.centerRight,
             padding: EdgeInsets.all(25),

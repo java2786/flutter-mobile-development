@@ -1,0 +1,70 @@
+class Book{
+	String name;
+	int price;
+  
+	Book({this.name="", this.price=0});
+}
+class Subject{
+	String name;
+	int marks;
+  List<Book> books;
+
+	Subject({required this.name, required this.marks, required this.books});
+}
+
+
+class Student{
+	String name;
+	List<Subject> subjects;
+
+	Student({required this.name, required this.subjects});
+}
+
+void myPrint(Student student){
+	int total = 0;
+	for(Subject sub in student.subjects){
+		total = total + sub.marks;
+	}
+	print("Name of student is ${student.name}");
+	print("Total score is $total");
+}
+
+void main(){
+	
+	myPrint(Student(
+		name: "Ramesh", 
+		subjects: [
+			Subject(name: "Math", marks: 55, books: [
+        Book(name: "Nature", price: 1000),
+        Book(name: "Water", price: 500),
+      ]),
+			Subject(name: "Hindi", marks: 67, books: [
+        Book(name: "Huglu", price: 400),
+        Book(name: "Buglu", price: 200),
+      ]),
+		]
+	));	
+
+}
+
+
+
+
+
+----------------
+
+Shopping Cart
+    customer name
+    items
+Item
+    name, price
+
+----------------
+
+User
+    name
+    movies
+
+Movie
+    duration
+    name 
