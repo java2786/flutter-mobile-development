@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main(){
   runApp(MaterialApp(
@@ -11,6 +12,11 @@ void main(){
 
 
 class ScreenA extends StatelessWidget{
+
+  void setValue() async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString("name", "24.6");
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,6 +24,7 @@ class ScreenA extends StatelessWidget{
       body: Center(
         child: ElevatedButton(
           onPressed: () {
+            setValue();
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => ScreenB()),
@@ -31,6 +38,14 @@ class ScreenA extends StatelessWidget{
 }
 
 class ScreenB extends StatelessWidget{
+  
+  String? hero = "Bat-man";
+
+  void readValue() async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();    
+      hero = prefs.getString("name");
+      print("Hero: $hero");
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +53,8 @@ class ScreenB extends StatelessWidget{
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            Navigator.pop(context); // goes back to the previous ScreenA
+          readValue();
+            // Navigator.pop(context); // goes back to the previous ScreenA
           },
           child: const Text("Go to Screen A"),
         ),
