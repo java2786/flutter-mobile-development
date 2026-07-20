@@ -65,7 +65,9 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void navigateToDetail() {}
+  void navigateToDetail(Expense expense) {
+    print("${expense.title} is clicked");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           "Rs. ${expense.amount.toStringAsFixed(2)}",
                         ),
                         onTap: () {
-                          print("${expense.title} is clicked");
+                          navigateToDetail(expense);
                           // navigateToDetail
                         },
                       );
@@ -95,7 +97,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   )
                 : const Center(child: Text('No Expenses')),
           ),
-          FloatingActionButton(onPressed: navigateToAddExpense, child: Icon(Icons.add),)
+          // FloatingActionButton(onPressed: navigateToAddExpense, child: Icon(Icons.add),)
+          Align(
+            alignment: Alignment.bottomRight, // or Alignment.bottomRight
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: FloatingActionButton(
+                onPressed: navigateToAddExpense,
+                child: Icon(Icons.add),
+              ),
+            ),
+          ),
         ],
       ),
     );
