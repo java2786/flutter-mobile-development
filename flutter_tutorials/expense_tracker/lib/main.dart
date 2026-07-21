@@ -1,4 +1,5 @@
 import 'package:expense_tracker/add_expense_screen.dart';
+import 'package:expense_tracker/expense_detail_screen.dart';
 import 'package:expense_tracker/expense_model.dart';
 import 'package:flutter/material.dart';
 
@@ -65,17 +66,64 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void navigateToDetail(Expense expense) {
+  void navigateToDetail(Expense expense, int index) async {
     print("${expense.title} is clicked");
+
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          // return AddExpenseScreen();
+          return ExpenseDetailsScreen(expense: expense);
+        },
+      ),
+    );
+
+    if(result == 'delete'){
+      setState(() {
+      // expenses.removeAt(index);
+      int ei = -1;
+
+      for(int i=0;i<expenses.length;i++){
+        Expense currentExpense = expenses[i];
+        if(currentExpense.title == expense.title &&
+          currentExpense.amount == expense.amount &&
+          currentExpense.category == expense.category && 
+          currentExpense.date == expense.date){
+            ei = i;
+            break;
+          }      
+      }
+
+      if(ei>-1){
+        expenses.removeAt(ei);
+      }
+      });
+
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+
+    double total = 0;
+    for(int i=0;i<expenses.length;i++){
+      total = total + expenses[i].amount;
+    }
+
     return Scaffold(
       appBar: AppBar(title: Text("Expense Tracker App")),
       // body: Center(child: Text("Expense List"),),
       body: Column(
         children: [
+          Container(
+            padding: EdgeInsets.all(15),
+            color: Colors.teal[100],
+            child: Text(
+              "Total Spent: Rs. ${total.toStringAsFixed(2)}",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
           Expanded(
             child: expenses.isNotEmpty
                 ? ListView.builder(
@@ -89,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           "Rs. ${expense.amount.toStringAsFixed(2)}",
                         ),
                         onTap: () {
-                          navigateToDetail(expense);
+                          navigateToDetail(expense, index);
                           // navigateToDetail
                         },
                       );
