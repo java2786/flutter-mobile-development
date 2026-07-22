@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bharat Task Manager - Screen Previews</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .parts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .part-section {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .part-title {
+            font-size: 1.3em;
+            color: #2196F3;
+            margin-bottom: 15px;
+            font-weight: bold;
+            border-bottom: 3px solid #2196F3;
+            padding-bottom: 10px;
+        }
+
+        .phone-frame {
+            width: 100%;
+            max-width: 350px;
+            margin: 0 auto;
+            background: #000;
+            border-radius: 30px;
+            padding: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+
+        .phone-screen {
+            background: #F5F5F5;
+            border-radius: 20px;
+            overflow: hidden;
+            height: 600px;
+            position: relative;
+        }
+
+        .app-bar {
+            background: #2196F3;
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .app-bar-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .screen-content {
+            padding: 20px;
+            overflow-y: auto;
+            height: calc(100% - 60px);
+        }
+
+        .welcome-gradient {
+            background: linear-gradient(180deg, #2196F3 0%, #1976D2 50%, #0D47A1 100%);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .welcome-icon {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            color: #2196F3;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .welcome-text {
+            text-align: center;
+        }
+
+        .welcome-small {
+            font-size: 20px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 10px;
+        }
+
+        .welcome-large {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .welcome-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+
+        .welcome-info {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+
+        .welcome-button {
+            background: white;
+            color: #2196F3;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            margin-top: 40px;
+        }
+
+        .task-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 2px solid;
+        }
+
+        .task-card.high {
+            border-color: rgba(211, 47, 47, 0.3);
+            background: linear-gradient(135deg, white 0%, rgba(255, 205, 210, 0.3) 100%);
+        }
+
+        .task-card.medium {
+            border-color: rgba(245, 124, 0, 0.3);
+            background: linear-gradient(135deg, white 0%, rgba(255, 224, 178, 0.3) 100%);
+        }
+
+        .task-card.low {
+            border-color: rgba(56, 142, 60, 0.3);
+            background: linear-gradient(135deg, white 0%, rgba(200, 230, 201, 0.3) 100%);
+        }
+
+        .task-card.completed {
+            background: #E0E0E0;
+            border-color: #BDBDBD;
+        }
+
+        .task-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .task-icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .task-icon-box.high { background: rgba(211, 47, 47, 0.1); }
+        .task-icon-box.medium { background: rgba(245, 124, 0, 0.1); }
+        .task-icon-box.low { background: rgba(56, 142, 60, 0.1); }
+        .task-icon-box.completed { background: rgba(76, 175, 80, 0.1); }
+
+        .task-title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #212121;
+            flex: 1;
+        }
+
+        .task-title.completed {
+            text-decoration: line-through;
+            color: #757575;
+        }
+
+        .task-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: bold;
+            color: white;
+            margin-top: 4px;
+        }
+
+        .task-badge.high { background: #D32F2F; }
+        .task-badge.medium { background: #F57C00; }
+        .task-badge.low { background: #388E3C; }
+
+        .task-description {
+            color: #616161;
+            font-size: 14px;
+            margin-left: 52px;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .task-description.completed {
+            text-decoration: line-through;
+            color: #9E9E9E;
+        }
+
+        .task-deadline {
+            margin-left: 52px;
+            display: inline-block;
+            background: #E3F2FD;
+            color: #1976D2;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .fab {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: #2196F3;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .form-field {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-size: 14px;
+            color: #424242;
+            margin-bottom: 8px;
+            display: block;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #E0E0E0;
+            border-radius: 10px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #2196F3;
+        }
+
+        .form-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .btn-cancel {
+            background: white;
+            color: #757575;
+            border: 2px solid #E0E0E0;
+        }
+
+        .btn-save {
+            background: #2196F3;
+            color: white;
+            border: none;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-icon {
+            width: 100px;
+            height: 100px;
+            background: #E3F2FD;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            color: #90CAF9;
+            margin: 0 auto 20px;
+        }
+
+        .empty-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #616161;
+            margin-bottom: 10px;
+        }
+
+        .empty-text {
+            color: #9E9E9E;
+            font-size: 14px;
+        }
+
+        .chip-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .chip {
+            background: #E0E0E0;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .chip.selected {
+            background: #2196F3;
+            color: white;
+        }
+
+        .stats-text {
+            font-size: 12px;
+            color: rgba(255,255,255,0.9);
+            margin-top: 2px;
+        }
+
+        .form-header {
+            background: linear-gradient(135deg, #42A5F5, #1E88E5);
+            padding: 20px;
+            border-radius: 12px;
+            color: white;
+            margin-bottom: 25px;
+        }
+
+        .form-header-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-header-subtitle {
+            font-size: 13px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .task-card {
+            animation: fadeIn 0.3s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 Bharat Task Manager - Screen Previews</h1>
+        
+        <div class="parts-container">
+            <!-- Part 1: Welcome Screen -->
+            <div class="part-section">
+                <div class="part-title">Part 1: Welcome Screen</div>
+                <div style="background: #FFF9C4; border-left: 4px solid #F9A825; padding: 10px 14px; border-radius: 6px; margin-bottom: 14px; font-size: 13px; color: #5D4037;">
+                    <strong>Trainer Note:</strong> This preview shows the final polished welcome screen as it will look after Part 5 (Styling). In Part 1, students build a plain white version with just text — the gradient background, icon, and button are added progressively. Show this wireframe as the "goal to reach", not what Part 1 produces on its own.
+                </div>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <div class="welcome-gradient">
+                            <div class="welcome-icon">✓</div>
+                            <div class="welcome-text">
+                                <div class="welcome-small">Welcome to</div>
+                                <div class="welcome-large">Bharat Task Manager</div>
+                                <div class="welcome-badge">Organize Your Life</div>
+                                <div class="welcome-info">
+                                    <div style="font-size: 16px;">Created by: Suresh Kumar</div>
+                                    <div style="font-size: 14px; margin-top: 5px; opacity: 0.8;">Pune, Maharashtra</div>
+                                </div>
+                                <div class="welcome-button">
+                                    Get Started
+                                    <span>→</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Part 2: Task List -->
+            <div class="part-section">
+                <div class="part-title">Part 2: Task List Screen</div>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <div class="app-bar">
+                            <span>←</span>
+                            <div style="flex: 1;">
+                                <div class="app-bar-title">My Tasks</div>
+                            </div>
+                        </div>
+                        <div class="screen-content">
+                            <div class="task-card high">
+                                <div class="task-header">
+                                    <div class="task-icon-box high">🎓</div>
+                                    <div style="flex: 1;">
+                                        <div class="task-title">Complete Flutter Assignment</div>
+                                        <span class="task-badge high">HIGH</span>
+                                    </div>
+                                </div>
+                                <div class="task-description">Finish the mobile app development assignment given by professor</div>
+                                <div class="task-deadline">🕐 Today, 6:00 PM</div>
+                            </div>
+
+                            <div class="task-card medium">
+                                <div class="task-header">
+                                    <div class="task-icon-box medium">🛒</div>
+                                    <div style="flex: 1;">
+                                        <div class="task-title">Buy Groceries from D-Mart</div>
+                                        <span class="task-badge medium">MEDIUM</span>
+                                    </div>
+                                </div>
+                                <div class="task-description">Rice, Dal, Vegetables, Milk</div>
+                                <div class="task-deadline">🕐 Tomorrow</div>
+                            </div>
+
+                            <div class="task-card high">
+                                <div class="task-header">
+                                    <div class="task-icon-box high">🎫</div>
+                                    <div style="flex: 1;">
+                                        <div class="task-title">Book Railway Tickets</div>
+                                        <span class="task-badge high">HIGH</span>
+                                    </div>
+                                </div>
+                                <div class="task-description">Pune to Chennai, Sleeper Class</div>
+                                <div class="task-deadline">🕐 2 days left</div>
+                            </div>
+
+                            <div class="task-card low">
+                                <div class="task-header">
+                                    <div class="task-icon-box low">💳</div>
+                                    <div style="flex: 1;">
+                                        <div class="task-title">Submit LIC Premium</div>
+                                        <span class="task-badge low">LOW</span>
+                                    </div>
+                                </div>
+                                <div class="task-description">Policy: 123456789, Amount: ₹5000</div>
+                                <div class="task-deadline">🕐 3 days left</div>
+                            </div>
+
+                            <div class="fab">+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Part 3: Add Task Form -->
+            <div class="part-section">
+                <div class="part-title">Part 3: Add Task Screen</div>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <div class="app-bar">
+                            <span>←</span>
+                            <div class="app-bar-title">Add New Task</div>
+                        </div>
+                        <div class="screen-content">
+                            <div class="form-header">
+                                <div class="form-header-title">
+                                    <span>➕</span> Create New Task
+                                </div>
+                                <div class="form-header-subtitle">Fill in the details to add a new task to your list</div>
+                            </div>
+
+                            <div class="form-field">
+                                <label class="form-label">Task Title</label>
+                                <input type="text" class="form-input" placeholder="E.g., Buy groceries">
+                            </div>
+
+                            <div class="form-field">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-input form-textarea" placeholder="E.g., Rice, Dal, Vegetables from D-Mart"></textarea>
+                            </div>
+
+                            <div class="form-field">
+                                <label class="form-label">Deadline</label>
+                                <input type="text" class="form-input" placeholder="E.g., Tomorrow, 5:00 PM">
+                            </div>
+
+                            <div class="form-field">
+                                <label class="form-label">Quick Deadline Options</label>
+                                <div class="chip-container">
+                                    <div class="chip">Today</div>
+                                    <div class="chip selected">Tomorrow</div>
+                                    <div class="chip">This Week</div>
+                                    <div class="chip">Next Week</div>
+                                </div>
+                            </div>
+
+                            <div class="form-field">
+                                <label class="form-label">Priority Level</label>
+                                <select class="form-input">
+                                    <option>🟠 Medium Priority</option>
+                                    <option>🔴 High Priority</option>
+                                    <option>🟢 Low Priority</option>
+                                </select>
+                            </div>
+
+                            <div class="form-buttons">
+                                <div class="btn btn-cancel">Cancel</div>
+                                <div class="btn btn-save">Save Task</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Part 4: With Completed Tasks -->
+            <div class="part-section">
+                <div class="part-title">Part 4: Task Management</div>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <div class="app-bar">
+                            <span>←</span>
+                            <div style="flex: 1;">
+                                <div class="app-bar-title">My Tasks</div>
+                                <div class="stats-text">2 pending, 1 completed</div>
+                            </div>
+                            <span>🗑️</span>
+                        </div>
+                        <div class="screen-content">
+                            <div class="task-card completed">
+                                <div class="task-header">
+                                    <div class="task-icon-box completed">✓</div>
+                                    <div style="flex: 1;">
+                                        <div class="task-title completed">Complete Flutter Assignment</div>
+                                    </div>
+                                </div>
+                                <div class="task-description completed">Finish the mobile app development assignment</div>
+                                <div class="task-deadline">🕐 Today, 6:00 PM</div>
+                            </div>
+
+                            <div class="task-card medium">
+                                <div class="task-header">
+                                    <div class="task-icon-box medium">🛒</div>
+                                    <div style="flex: 1;">
+                                        <div class="task-title">Buy Groceries from D-Mart</div>
+                                        <span class="task-badge medium">MEDIUM</span>
+                                    </div>
+                                </div>
+                                <div class="task-description">Rice, Dal, Vegetables, Milk</div>
+                                <div class="task-deadline">🕐 Tomorrow</div>
+                            </div>
+
+                            <div class="task-card high">
+                                <div class="task-header">
+                                    <div class="task-icon-box high">🎫</div>
+                                    <div style="flex: 1;">
+                                        <div class="task-title">Book Railway Tickets</div>
+                                        <span class="task-badge high">HIGH</span>
+                                    </div>
+                                </div>
+                                <div class="task-description">Pune to Chennai, Sleeper Class</div>
+                                <div class="task-deadline">🕐 2 days left</div>
+                            </div>
+
+                            <div class="fab">+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Part 5: Empty State -->
+            <div class="part-section">
+                <div class="part-title">Part 5: Empty State</div>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <div class="app-bar">
+                            <span>←</span>
+                            <div style="flex: 1;">
+                                <div class="app-bar-title">My Tasks</div>
+                                <div class="stats-text">0 pending, 0 completed</div>
+                            </div>
+                            <span>🗑️</span>
+                        </div>
+                        <div class="screen-content">
+                            <div class="empty-state">
+                                <div class="empty-icon">✓</div>
+                                <div class="empty-title">No Tasks Yet!</div>
+                                <div class="empty-text">Tap the + button below to create<br>your first task</div>
+                                <div style="margin-top: 30px; background: #E3F2FD; padding: 12px 20px; border-radius: 20px; display: inline-block;">
+                                    <span style="margin-right: 8px;">💡</span>
+                                    <span style="color: #1976D2; font-size: 14px; font-weight: 500;">Stay organized and productive!</span>
+                                </div>
+                            </div>
+                            <div class="fab">+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Part 6: Final Polish -->
+            <div class="part-section">
+                <div class="part-title">Part 6: Final Production App</div>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <div class="app-bar">
+                            <span>←</span>
+                            <div style="flex: 1;">
+                                <div class="app-bar-title">My Tasks</div>
+                                <div class="stats-text">3 pending, 1 completed</div>
+                            </div>
+                            <span>🗑️</span>
+                        </div>
+                        <div class="screen-content">
+                            <div class="task-card medium" style="animation-delay: 0s;">
+                                <div class="task-header">
+                                    <div class="task-icon-box medium">📞</div>
+                                    <div style="flex: 1;">
+                                        <div class="task-title">Call Mukesh about Project</div>
+                                        <span class="task-badge medium">MEDIUM</span>
+                                    </div>
+                                </div>
+                                <div class="task-description">Discuss the college project details and timeline</div>
+                                <div class="task-deadline">🕐 Today, 8:00 PM</div>
+                            </div>
+
+                            <div class="task-card high" style="animation-delay: 0.1s;">
+                                <div class="task-header">
+                                    <div class="task-icon-box high">📍</div>
+                                    <div style="flex: 1;">
+                                        <div class="task-title">Visit Temple on Sunday</div>
+                                        <span class="task-badge high">HIGH</span>
+                                    </div>
+                                </div>
+                                <div class="task-description">Go to Siddhivinayak Temple with family</div>
+                                <div class="task-deadline">🕐 This Sunday, 8:00 AM</div>
+                            </div>
+
+                            <div class="task-card low" style="animation-delay: 0.2s;">
+                                <div class="task-header">
+                                    <div class="task-icon-box low">📦</div>
+                                    <div style="flex: 1;">
+                                        <div class="task-title">Order Flipkart Package</div>
+                                        <span class="task-badge low">LOW</span>
+                                    </div>
+                                </div>
+                                <div class="task-description">Laptop charger and mouse for college work</div>
+                                <div class="task-deadline">🕐 This week</div>
+                            </div>
+
+                            <div class="task-card completed" style="animation-delay: 0.3s;">
+                                <div class="task-header">
+                                    <div class="task-icon-box completed">✓</div>
+                                    <div style="flex: 1;">
+                                        <div class="task-title completed">Pay LIC Premium</div>
+                                    </div>
+                                </div>
+                                <div class="task-description completed">Policy: 123456789, Amount: ₹5000</div>
+                                <div class="task-deadline">🕐 3 days left</div>
+                            </div>
+
+                            <div class="fab">+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; color: white; margin-top: 40px; padding: 20px;">
+            <h2 style="margin-bottom: 15px;">📚 Complete Flutter Training Series</h2>
+            <p style="font-size: 16px; margin-bottom: 10px;">These previews show what your app will look like after each part</p>
+            <p style="font-size: 14px; opacity: 0.9;">Open each training document and follow step-by-step to build this app!</p>
+        </div>
+    </div>
+</body>
+</html>
